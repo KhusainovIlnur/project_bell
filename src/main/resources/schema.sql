@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS Document_type (
 COMMENT ON TABLE Document_type IS 'Справочник документов';
 
 CREATE INDEX IX_Document_type_User_id ON Document_type (user_id);
-ALTER TABLE Document_type ADD FOREIGN KEY (user_id) REFERENCES User(id);
+ALTER TABLE Document_type ADD FOREIGN KEY (user_id) REFERENCES Document(user_id);
 
 CREATE TABLE IF NOT EXISTS Country (
     user_id         INTEGER                  COMMENT 'Уникальный идентификатор пользователя' PRIMARY KEY,
