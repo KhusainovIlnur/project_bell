@@ -32,7 +32,7 @@ public class Office {
     private String phone;
 
     @Column(name = "is_active")
-    private boolean isActive;
+    private Boolean isActive;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "office_id")

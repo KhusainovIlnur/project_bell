@@ -38,7 +38,7 @@ public class User {
     private String phone;
 
     @Column(name = "is_identified")
-    private boolean isIdentified;
+    private Boolean isIdentified;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @PrimaryKeyJoinColumn
