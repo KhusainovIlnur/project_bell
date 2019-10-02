@@ -36,4 +36,10 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
     public ErrorView handleSQLException(SQLException ex) {
         return new ErrorView(ex.getMessage());
     }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorView handleNotFoundException(NotFoundException ex) {
+        return new ErrorView(ex.getMessage());
+    }
 }

@@ -8,7 +8,7 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-@RestControllerAdvice
+@RestControllerAdvice("project.khusainov")
 public class BodyWrapperAdvice implements ResponseBodyAdvice<Object> {
 
     private ResultView resultView;
