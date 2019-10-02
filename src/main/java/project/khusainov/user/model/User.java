@@ -3,6 +3,7 @@ package project.khusainov.user.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Version;
 import javax.persistence.OneToOne;
 import javax.persistence.FetchType;
@@ -10,6 +11,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.validation.constraints.Min;
 
 @Entity(name = "User")
 public class User {
@@ -21,6 +23,9 @@ public class User {
 
     @Version
     private Integer version;
+
+    @Column(name = "office_id", nullable = false)
+    private Long officeId;
 
     @Column(name = "first_name", length = 15, nullable = false)
     private String firstName;
@@ -40,12 +45,10 @@ public class User {
     @Column(name = "is_identified")
     private Boolean isIdentified;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @PrimaryKeyJoinColumn
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     private Document document;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @PrimaryKeyJoinColumn
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     private Country country;
 
     public Long getId() {
@@ -104,19 +107,35 @@ public class User {
         this.phone = phone;
     }
 
-    public boolean isIdentified() {
-        return isIdentified;
-    }
-
-    public void setIdentified(boolean identified) {
-        isIdentified = identified;
-    }
-
     public Document getDocument() {
         return document;
     }
 
     public void setDocument(Document document) {
         this.document = document;
+    }
+
+    public Long getOfficeId() {
+        return officeId;
+    }
+
+    public void setOfficeId(Long officeId) {
+        this.officeId = officeId;
+    }
+
+    public Boolean getIdentified() {
+        return isIdentified;
+    }
+
+    public void setIdentified(Boolean identified) {
+        isIdentified = identified;
+    }
+
+    public Country getCountry() {
+        return country;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
     }
 }

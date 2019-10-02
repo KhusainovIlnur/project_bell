@@ -2,7 +2,12 @@ package project.khusainov.user.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Version;
 
 @Entity(name = "Country")
@@ -19,6 +24,10 @@ public class Country {
 
     @Column(name = "country_name", length = 50)
     private String countryName;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    private User user;
 
     public Long getUserId() {
         return userId;
@@ -52,4 +61,11 @@ public class Country {
         this.countryName = countryName;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
