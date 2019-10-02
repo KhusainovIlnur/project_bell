@@ -9,8 +9,30 @@ import project.khusainov.organization.view.OrganizationUpdateReqView;
 import java.util.List;
 
 public interface OrganizationService {
-    List<OrganizationListRespView> getOrganizationByFilter(OrganizationListReqView organizationListReqView);
-    OrganizationByIdRespView getOrganizationById(Long id);
-    void saveOrganization(OrganizationSaveReqView organizationSaveReqView);
-    void updateOrganization(OrganizationUpdateReqView organizationUpdateReqView);
+
+    /**
+     * Получить список организаций по фильтру
+     * @param organizationListReqView
+     * @return
+     */
+    public List<OrganizationListRespView> getOrganizationByFilter(OrganizationListReqView organizationListReqView);
+
+    /**
+     * Получить организацию по id
+     * @param id
+     * @return
+     */
+    public OrganizationByIdRespView getOrganizationById(Long id);
+
+    /**
+     * Добавить организацию
+     * @param organizationSaveReqView
+     */
+    public void saveOrganization(OrganizationSaveReqView organizationSaveReqView);
+
+    /**
+     * Обновить организацию
+     * @param organizationUpdateReqView
+     */
+    public void updateOrganization(OrganizationUpdateReqView organizationUpdateReqView);
 }

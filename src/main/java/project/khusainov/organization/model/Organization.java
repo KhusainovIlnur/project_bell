@@ -13,38 +13,71 @@ import javax.persistence.CascadeType;
 import javax.persistence.JoinColumn;
 import java.util.List;
 
+/**
+ * Сущность организация
+ */
 @Entity(name = "Organization")
 public class Organization {
 
+    /**
+     * Id организации
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
+    /**
+     * Служебное поле hibernate
+     */
     @Version
     private Integer version;
 
+    /**
+     * Название организации
+     */
     @Column(name = "name", length = 50, nullable = false)
     private String name;
 
+    /**
+     * Полное название организации
+     */
     @Column(name = "full_name", length = 100, nullable = false)
     private String fullName;
 
+    /**
+     * ИНН организации
+     */
     @Column(name = "inn", length = 12, nullable = false)
     private String inn;
 
+    /**
+     * КПП организации
+     */
     @Column(name = "kpp", length = 9, nullable = false)
     private String kpp;
 
+    /**
+     * Адрес организации
+     */
     @Column(name = "address", length = 100, nullable = false)
     private String address;
 
+    /**
+     * Телефон организации
+     */
     @Column(name = "phone", length = 18)
     private String phone;
 
+    /**
+     * Активность организации
+     */
     @Column(name = "is_active")
     private Boolean isActive;
 
+    /**
+     * Офисы организации
+     */
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "organization_id")
     private List<Office> offices;

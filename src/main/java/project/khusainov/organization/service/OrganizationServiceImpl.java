@@ -13,6 +13,9 @@ import project.khusainov.organization.view.OrganizationUpdateReqView;
 
 import java.util.List;
 
+/**
+ * {@inheritDoc}
+ */
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
     private OrganizationDao dao;
@@ -22,18 +25,27 @@ public class OrganizationServiceImpl implements OrganizationService {
         this.dao = dao;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(readOnly = true)
     public List<OrganizationListRespView> getOrganizationByFilter(OrganizationListReqView organizationListReqView) {
         return dao.getListByFilter(organizationListReqView);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(readOnly = true)
     public OrganizationByIdRespView getOrganizationById(Long id) {
         return dao.getOrganizationById(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public void saveOrganization(OrganizationSaveReqView organizationSaveReqView) {
@@ -51,6 +63,9 @@ public class OrganizationServiceImpl implements OrganizationService {
         dao.save(organization);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public void updateOrganization(OrganizationUpdateReqView organizationUpdateReqView) {

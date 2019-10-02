@@ -1,11 +1,16 @@
 package project.khusainov.organization.view;
 
-import com.fasterxml.jackson.annotation.JsonRootName;
+import io.swagger.annotations.ApiModelProperty;
 
-@JsonRootName(value = "ResponseWrapperView")
 public class OrganizationListRespView {
+
+    @ApiModelProperty(value = "Id организации", example = "1")
     public Long id;
+
+    @ApiModelProperty(value = "Название организации", example = "МТС")
     public String name;
+
+    @ApiModelProperty(value = "Активность организации", example = "true")
     public Boolean isActive;
 
     public OrganizationListRespView(Long id, String name, Boolean isActive) {

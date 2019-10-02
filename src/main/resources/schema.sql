@@ -47,7 +47,7 @@ ALTER TABLE User ADD FOREIGN KEY (office_id) REFERENCES Office(id);
 CREATE TABLE IF NOT EXISTS Document (
      user_id         LONG                     COMMENT 'Уникальный идентификатор пользователя' PRIMARY KEY,
      version         INTEGER NOT NULL         COMMENT 'Служебное поле hibernate',
-     doc_number      LONG                     COMMENT 'Номер документа',
+     doc_number      VARCHAR(20)              COMMENT 'Номер документа',
      doc_date        DATE                     COMMENT 'Дата выдачи документа'
 
 );

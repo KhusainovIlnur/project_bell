@@ -1,5 +1,9 @@
 package project.khusainov.organization.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +19,12 @@ import project.khusainov.organization.view.OrganizationListReqView;
 import project.khusainov.organization.view.OrganizationListRespView;
 import project.khusainov.organization.view.OrganizationSaveReqView;
 import project.khusainov.organization.view.OrganizationUpdateReqView;
+import project.khusainov.view.SuccessView;
 
 import javax.validation.Valid;
 import java.util.List;
 
+@Api(value = "OrganizationController")
 @RestController
 @RequestMapping("/organization")
 public class OrganizationController {
@@ -30,6 +36,10 @@ public class OrganizationController {
         this.organizationService = organizationService;
     }
 
+    @ApiOperation(value = "Получить список организаций по фильтру", httpMethod = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = OrganizationListRespView.class)
+    })
     @PostMapping("/list")
     public List<OrganizationListRespView> getList(@Valid @RequestBody OrganizationListReqView organizationListReqView, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -40,6 +50,10 @@ public class OrganizationController {
         }
     }
 
+    @ApiOperation(value = "Получить организацию по id", httpMethod = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = OrganizationByIdRespView.class)
+    })
     @GetMapping("/{id}")
     public OrganizationByIdRespView getById(@PathVariable String id) {
         Long convertToLong;
@@ -53,6 +67,10 @@ public class OrganizationController {
 
     }
 
+    @ApiOperation(value = "Добавить организацию", httpMethod = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = SuccessView.class)
+    })
     @PostMapping("/save")
     public void save(@Valid @RequestBody OrganizationSaveReqView organizationSaveReqView, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -63,6 +81,10 @@ public class OrganizationController {
         }
     }
 
+    @ApiOperation(value = "Обновить организацию", httpMethod = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = SuccessView.class)
+    })
     @PostMapping("/update")
     public void update(@Valid @RequestBody OrganizationUpdateReqView organizationUpdateReqView, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

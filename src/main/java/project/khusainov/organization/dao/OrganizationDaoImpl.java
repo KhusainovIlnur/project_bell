@@ -17,6 +17,9 @@ import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * {@inheritDoc}
+ */
 @Repository
 public class OrganizationDaoImpl implements OrganizationDao {
 
@@ -26,6 +29,9 @@ public class OrganizationDaoImpl implements OrganizationDao {
         this.em = em;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<OrganizationListRespView> getListByFilter(OrganizationListReqView organizationListReqView) {
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
@@ -57,6 +63,9 @@ public class OrganizationDaoImpl implements OrganizationDao {
         return organizationList;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public OrganizationByIdRespView getOrganizationById(Long id) {
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
@@ -84,11 +93,17 @@ public class OrganizationDaoImpl implements OrganizationDao {
         return query.getResultList().size() > 0 ? organizationByIdRespView.get(0) : null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void save(Organization organization) {
         em.persist(organization);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(OrganizationUpdateReqView organizationUpdateReqView) {
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
@@ -109,10 +124,6 @@ public class OrganizationDaoImpl implements OrganizationDao {
                 .where(criteriaBuilder.equal(organization.get("id"), organizationUpdateReqView.id)
         );
 
-        int updateRes = em.createQuery(criteriaUpdate).executeUpdate();
-
-//        return updateRes > 0 ?"success" : "failed";
+        em.createQuery(criteriaUpdate).executeUpdate();
     }
-
-
 }

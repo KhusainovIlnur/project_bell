@@ -40,10 +40,10 @@ INSERT INTO Document_type (user_id, version, doc_code, doc_name) VALUES (6, 0, 0
 INSERT INTO Document_type (user_id, version, doc_code, doc_name) VALUES (7, 0, 07, 'Военный билет');
 INSERT INTO Document_type (user_id, version, doc_code, doc_name) VALUES (8, 0, 03, 'Свидетельство о рождении');
 
-INSERT INTO Country (user_id, version, country_code, country_name) VALUES (1, 0, 643, 'Россия');
-INSERT INTO Country (user_id, version, country_code, country_name) VALUES (2, 0, 804, 'Украина');
+INSERT INTO Country (user_id, version, country_code, country_name) VALUES (1, 0, 112, 'Беларусь');
+INSERT INTO Country (user_id, version, country_code, country_name) VALUES (2, 0, 643, 'Россия');
 INSERT INTO Country (user_id, version, country_code, country_name) VALUES (3, 0, 643, 'Россия');
-INSERT INTO Country (user_id, version, country_code, country_name) VALUES (4, 0, 112, 'Беларусь');
+INSERT INTO Country (user_id, version, country_code, country_name) VALUES (4, 0, 804, 'Украина');
 INSERT INTO Country (user_id, version, country_code, country_name) VALUES (5, 0, 643, 'Россия');
 INSERT INTO Country (user_id, version, country_code, country_name) VALUES (6, 0, 643, 'Россия');
 INSERT INTO Country (user_id, version, country_code, country_name) VALUES (7, 0, 643, 'Россия');
