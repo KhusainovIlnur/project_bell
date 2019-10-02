@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
         document.setDocDate(userSaveReqView.docDate);
         document.setDocumentType(documentType);
 
-        documentType.setDocument(document);
+//        documentType.setDocument(document);
 
         Country country = new Country();
         country.setCountryCode(userSaveReqView.citizenshipCode);

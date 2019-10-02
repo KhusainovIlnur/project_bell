@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Version;
 import javax.persistence.Temporal;
@@ -34,8 +35,12 @@ public class Document {
     @MapsId
     private User user;
 
-    @OneToOne(mappedBy = "document", fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "user_id")
+//    @OneToOne(mappedBy = "document", fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+//    @JoinColumn(name = "user_id")
+//    private DocumentType documentType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "document_type_id")
     private DocumentType documentType;
 
     public Long getUserId() {
@@ -85,5 +90,6 @@ public class Document {
     public void setUser(User user) {
         this.user = user;
     }
+
 }
 

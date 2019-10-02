@@ -22,23 +22,18 @@ INSERT INTO User (id, version, office_id, first_name, second_name, middle_name, 
 INSERT INTO User (id, version, office_id, first_name, second_name, middle_name, position, phone, is_identified) VALUES (7, 0, 4, 'Булат', 'Анваров', 'Рамилевич', 'Продавец-консультант', '8(900)0002874', true);
 INSERT INTO User (id, version, office_id, first_name, second_name, middle_name, position, phone, is_identified) VALUES (8, 0, 4, 'Элина', 'Хабирова', 'Ураловна', 'Менеджер', '8(900)2356412', false);
 
-INSERT INTO Document (user_id, version, doc_number, doc_date) VALUES (1, 0, 789632, '1995-03-02');
-INSERT INTO Document (user_id, version, doc_number, doc_date) VALUES (2, 0, 4789213, '1998-10-05');
-INSERT INTO Document (user_id, version, doc_number, doc_date) VALUES (3, 0, 124578, '1995-09-01');
-INSERT INTO Document (user_id, version, doc_number, doc_date) VALUES (4, 0, 859674, '1998-04-18');
-INSERT INTO Document (user_id, version, doc_number, doc_date) VALUES (5, 0, 475869, '2000-07-20');
-INSERT INTO Document (user_id, version, doc_number, doc_date) VALUES (6, 0, 8556855, '2011-03-14');
-INSERT INTO Document (user_id, version, doc_number, doc_date) VALUES (7, 0, 2563254, '2016-03-28');
-INSERT INTO Document (user_id, version, doc_number, doc_date) VALUES (8, 0, 214758, '1995-01-07');
+INSERT INTO Document_type (id, version, doc_code, doc_name) VALUES (1, 0, 21, 'Паспорт гражданина Российской Федерации');
+INSERT INTO Document_type (id, version, doc_code, doc_name) VALUES (2, 0, 3, 'Свидетельство о рождении');
+INSERT INTO Document_type (id, version, doc_code, doc_name) VALUES (3, 0, 7, 'Военный билет');
 
-INSERT INTO Document_type (user_id, version, doc_code, doc_name) VALUES (1, 0, 21, 'Паспорт гражданина Российской Федерации');
-INSERT INTO Document_type (user_id, version, doc_code, doc_name) VALUES (2, 0, 03, 'Свидетельство о рождении');
-INSERT INTO Document_type (user_id, version, doc_code, doc_name) VALUES (3, 0, 21, 'Паспорт гражданина Российской Федерации');
-INSERT INTO Document_type (user_id, version, doc_code, doc_name) VALUES (4, 0, 03, 'Свидетельство о рождении');
-INSERT INTO Document_type (user_id, version, doc_code, doc_name) VALUES (5, 0, 21, 'Паспорт гражданина Российской Федерации');
-INSERT INTO Document_type (user_id, version, doc_code, doc_name) VALUES (6, 0, 07, 'Военный билет');
-INSERT INTO Document_type (user_id, version, doc_code, doc_name) VALUES (7, 0, 07, 'Военный билет');
-INSERT INTO Document_type (user_id, version, doc_code, doc_name) VALUES (8, 0, 03, 'Свидетельство о рождении');
+INSERT INTO Document (user_id, version, document_type_id, doc_number, doc_date) VALUES (1, 0, 1, 789632, '1995-03-02');
+INSERT INTO Document (user_id, version, document_type_id, doc_number, doc_date) VALUES (2, 0, 2, 4789213, '1998-10-05');
+INSERT INTO Document (user_id, version, document_type_id, doc_number, doc_date) VALUES (3, 0, 1, 124578, '1995-09-01');
+INSERT INTO Document (user_id, version, document_type_id, doc_number, doc_date) VALUES (4, 0, 2, 859674, '1998-04-18');
+INSERT INTO Document (user_id, version, document_type_id, doc_number, doc_date) VALUES (5, 0, 1, 475869, '2000-07-20');
+INSERT INTO Document (user_id, version, document_type_id, doc_number, doc_date) VALUES (6, 0, 3, 8556855, '2011-03-14');
+INSERT INTO Document (user_id, version, document_type_id, doc_number, doc_date) VALUES (7, 0, 3, 2563254, '2016-03-28');
+INSERT INTO Document (user_id, version, document_type_id, doc_number, doc_date) VALUES (8, 0, 2, 214758, '1995-01-07');
 
 INSERT INTO Country (user_id, version, country_code, country_name) VALUES (1, 0, 112, 'Беларусь');
 INSERT INTO Country (user_id, version, country_code, country_name) VALUES (2, 0, 643, 'Россия');

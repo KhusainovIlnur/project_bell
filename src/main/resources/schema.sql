@@ -47,6 +47,7 @@ ALTER TABLE User ADD FOREIGN KEY (office_id) REFERENCES Office(id);
 CREATE TABLE IF NOT EXISTS Document (
      user_id         LONG                     COMMENT 'Уникальный идентификатор пользователя' PRIMARY KEY,
      version         INTEGER NOT NULL         COMMENT 'Служебное поле hibernate',
+     document_type_id LONG                    COMMENT 'Идентификатор типа документа',
      doc_number      VARCHAR(20)              COMMENT 'Номер документа',
      doc_date        DATE                     COMMENT 'Дата выдачи документа'
 
@@ -56,8 +57,9 @@ COMMENT ON TABLE Document IS 'Документ пользователя';
 CREATE INDEX IX_Document_User_id ON Document (user_id);
 ALTER TABLE Document ADD FOREIGN KEY (user_id) REFERENCES User(id);
 
+
 CREATE TABLE IF NOT EXISTS Document_type (
-     user_id         LONG                     COMMENT 'Уникальный идентификатор пользователя' PRIMARY KEY,
+     id              LONG                     COMMENT 'Уникальный идентификатор типа документа' PRIMARY KEY AUTO_INCREMENT,
      version         INTEGER NOT NULL         COMMENT 'Служебное поле hibernate',
      doc_code        INTEGER                  COMMENT 'Код документа',
      doc_name        VARCHAR(100)             COMMENT 'Название документа'
@@ -65,8 +67,8 @@ CREATE TABLE IF NOT EXISTS Document_type (
 );
 COMMENT ON TABLE Document_type IS 'Справочник документов';
 
-CREATE INDEX IX_Document_type_User_id ON Document_type (user_id);
-ALTER TABLE Document_type ADD FOREIGN KEY (user_id) REFERENCES Document(user_id);
+CREATE INDEX IX_Document_type_id ON Document_type (id);
+ALTER TABLE Document ADD FOREIGN KEY (document_type_id) REFERENCES Document_type(id);
 
 CREATE TABLE IF NOT EXISTS Country (
     user_id         LONG                     COMMENT 'Уникальный идентификатор пользователя' PRIMARY KEY,

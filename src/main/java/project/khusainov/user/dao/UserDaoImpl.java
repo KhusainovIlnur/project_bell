@@ -15,6 +15,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
@@ -101,7 +102,7 @@ public class UserDaoImpl implements UserDao {
 
         criteriaQuery.where(
                 criteriaBuilder.equal(document.get("userId"), user.get("id")),
-                criteriaBuilder.equal(documentType.get("userId"), document.get("userId")),
+                criteriaBuilder.equal(document.get("documentType"), documentType.get("id")),
                 criteriaBuilder.equal(country.get("userId"), user.get("id")),
                 criteriaBuilder.equal(user.get("id"), id)
         );
@@ -127,7 +128,7 @@ public class UserDaoImpl implements UserDao {
     public void update(UserUpdateReqView userUpdateReqView) {
         updateUser(userUpdateReqView);
         updateDocument(userUpdateReqView);
-        updateDocumentType(userUpdateReqView);
+//        updateDocumentType(userUpdateReqView);
         updateCountry(userUpdateReqView);
     }
 
@@ -143,6 +144,7 @@ public class UserDaoImpl implements UserDao {
                 .set(user.get("middleName"),    userUpdateReqView.middleName)
                 .set(user.get("position"),      userUpdateReqView.position)
                 .set(user.get("phone"),         userUpdateReqView.phone)
+//                .set(user.get("documentType"),  3)
                 .set(user.get("isIdentified"),  userUpdateReqView.isIdentified);
 
         criteriaUpdate
@@ -177,7 +179,7 @@ public class UserDaoImpl implements UserDao {
                 .set(documentType.get("docName"),  userUpdateReqView.docName);
 
         criteriaUpdate
-                .where(criteriaBuilder.equal(documentType.get("userId"), userUpdateReqView.id)
+                .where(criteriaBuilder.equal(documentType.get("id"), userUpdateReqView.id)
                 );
 
         em.createQuery(criteriaUpdate).executeUpdate();
