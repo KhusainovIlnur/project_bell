@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.khusainov.exception.NotFoundException;
+import project.khusainov.handbook.country.service.CountryService;
+import project.khusainov.handbook.doc.service.DocService;
 import project.khusainov.office.service.OfficeService;
 import project.khusainov.user.dao.UserDao;
 import project.khusainov.user.model.Country;
@@ -26,7 +28,14 @@ public class UserServiceImpl implements UserService {
     private UserDao dao;
 
     @Autowired
+    private DocService docService;
+
+    @Autowired
+    private CountryService countryService;
+
+    @Autowired
     private OfficeService officeService;
+
 
     @Autowired
     public UserServiceImpl(UserDao dao) {
@@ -62,19 +71,24 @@ public class UserServiceImpl implements UserService {
             throw new NotFoundException("Офис с таким id не найден");
         }
 
-        DocumentType documentType = new DocumentType();
-        documentType.setDocCode(userSaveReqView.docCode);
-        documentType.setDocName(userSaveReqView.docName);
+        DocumentType dtByCode = docService.getDocByCode(userSaveReqView.docCode);
+        DocumentType dtByName = docService.getDocByName(userSaveReqView.docName);
+
+        if (dtByCode == null) {
+            throw new NotFoundException("Документ с таким кодом не найден");
+        }
+
+        if (dtByName == null) {
+            throw new NotFoundException("Документ с таким именем не найден");
+        }
+
+        Country countryByCode = countryService.getCountryByCode(userSaveReqView.citizenshipCode);
+
 
         Document document = new Document();
         document.setDocNumber(userSaveReqView.docNumber);
         document.setDocDate(userSaveReqView.docDate);
-        document.setDocumentType(documentType);
-
-//        documentType.setDocument(document);
-
-        Country country = new Country();
-        country.setCountryCode(userSaveReqView.citizenshipCode);
+        document.setDocumentType(dtByCode);
 
         User user = new User();
 
@@ -85,12 +99,8 @@ public class UserServiceImpl implements UserService {
         user.setPosition(userSaveReqView.position);
         user.setPhone(userSaveReqView.phone);
         user.setIdentified(userSaveReqView.isIdentified);
-
         user.setDocument(document);
-        user.setCountry(country);
-
-        document.setUser(user);
-        country.setUser(user);
+        user.setCountry(countryByCode);
 
         dao.save(user);
     }

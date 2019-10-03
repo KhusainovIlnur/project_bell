@@ -13,8 +13,8 @@ import javax.persistence.Version;
 @Entity(name = "Country")
 public class Country {
     @Id
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "id")
+    private Long id;
 
     @Version
     private Integer version;
@@ -25,16 +25,21 @@ public class Country {
     @Column(name = "country_name", length = 50)
     private String countryName;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
-    private User user;
-
-    public Long getUserId() {
-        return userId;
+    public Country() {
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public Country(Long id, Integer countryCode, String countryName) {
+        this.id = id;
+        this.countryCode = countryCode;
+        this.countryName = countryName;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Integer getVersion() {
@@ -59,13 +64,5 @@ public class Country {
 
     public void setCountryName(String countryName) {
         this.countryName = countryName;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

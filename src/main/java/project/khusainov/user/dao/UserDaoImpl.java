@@ -1,6 +1,9 @@
 package project.khusainov.user.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import project.khusainov.handbook.country.service.CountryService;
+import project.khusainov.handbook.doc.service.DocService;
 import project.khusainov.user.model.Country;
 import project.khusainov.user.model.Document;
 import project.khusainov.user.model.DocumentType;
@@ -28,6 +31,12 @@ import java.util.List;
 public class UserDaoImpl implements UserDao {
 
     private final EntityManager em;
+
+    @Autowired
+    private DocService docService;
+
+    @Autowired
+    private CountryService countryService;
 
     public UserDaoImpl(EntityManager em) {
         this.em = em;
@@ -103,7 +112,7 @@ public class UserDaoImpl implements UserDao {
         criteriaQuery.where(
                 criteriaBuilder.equal(document.get("userId"), user.get("id")),
                 criteriaBuilder.equal(document.get("documentType"), documentType.get("id")),
-                criteriaBuilder.equal(country.get("userId"), user.get("id")),
+                criteriaBuilder.equal(country.get("id"), user.get("country")),
                 criteriaBuilder.equal(user.get("id"), id)
         );
 
@@ -128,11 +137,11 @@ public class UserDaoImpl implements UserDao {
     public void update(UserUpdateReqView userUpdateReqView) {
         updateUser(userUpdateReqView);
         updateDocument(userUpdateReqView);
-//        updateDocumentType(userUpdateReqView);
-        updateCountry(userUpdateReqView);
     }
 
     private void updateUser(UserUpdateReqView userUpdateReqView) {
+        Country country = countryService.getCountryByCode(userUpdateReqView.citizenshipCode);
+
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaUpdate<User> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(User.class); // что обновляем
         Root<User> user = criteriaUpdate.from(User.class); // откуда берем
@@ -144,57 +153,30 @@ public class UserDaoImpl implements UserDao {
                 .set(user.get("middleName"),    userUpdateReqView.middleName)
                 .set(user.get("position"),      userUpdateReqView.position)
                 .set(user.get("phone"),         userUpdateReqView.phone)
-//                .set(user.get("documentType"),  3)
+                .set(user.get("country"),       country)
                 .set(user.get("isIdentified"),  userUpdateReqView.isIdentified);
 
-        criteriaUpdate
-                .where(criteriaBuilder.equal(user.get("id"), userUpdateReqView.id)
-                );
+        criteriaUpdate.where(
+                criteriaBuilder.equal(user.get("id"), userUpdateReqView.id)
+            );
 
         em.createQuery(criteriaUpdate).executeUpdate();
     }
 
     private void updateDocument(UserUpdateReqView userUpdateReqView) {
+        DocumentType documentType = docService.getDocByName(userUpdateReqView.docName);
+
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaUpdate<Document> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(Document.class); // что обновляем
         Root<Document> document = criteriaUpdate.from(Document.class); // откуда берем
 
         criteriaUpdate
                 .set(document.get("docNumber"), userUpdateReqView.docNumber)
+                .set(document.get("documentType"), documentType)
                 .set(document.get("docDate"),   userUpdateReqView.docDate);
 
         criteriaUpdate
                 .where(criteriaBuilder.equal(document.get("userId"), userUpdateReqView.id)
-                );
-
-        em.createQuery(criteriaUpdate).executeUpdate();
-    }
-
-    private void updateDocumentType(UserUpdateReqView userUpdateReqView) {
-        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-        CriteriaUpdate<DocumentType> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(DocumentType.class); // что обновляем
-        Root<DocumentType> documentType = criteriaUpdate.from(DocumentType.class); // откуда берем
-
-        criteriaUpdate
-                .set(documentType.get("docName"),  userUpdateReqView.docName);
-
-        criteriaUpdate
-                .where(criteriaBuilder.equal(documentType.get("id"), userUpdateReqView.id)
-                );
-
-        em.createQuery(criteriaUpdate).executeUpdate();
-    }
-
-    private void updateCountry(UserUpdateReqView userUpdateReqView) {
-        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-        CriteriaUpdate<Country> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(Country.class); // что обновляем
-        Root<Country> country = criteriaUpdate.from(Country.class); // откуда берем
-
-        criteriaUpdate
-                .set(country.get("countryCode"),  userUpdateReqView.citizenshipCode);
-
-        criteriaUpdate
-                .where(criteriaBuilder.equal(country.get("userId"), userUpdateReqView.id)
                 );
 
         em.createQuery(criteriaUpdate).executeUpdate();

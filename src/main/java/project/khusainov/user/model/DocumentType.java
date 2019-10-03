@@ -31,6 +31,16 @@ public class DocumentType {
 //    @OneToMany(mappedBy="documentType", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<Document> document;
 
+
+    public DocumentType() {
+    }
+
+    public DocumentType(Long id, Integer docCode, String docName) {
+        this.id = id;
+        this.docCode = docCode;
+        this.docName = docName;
+    }
+
     public Long getId() {
         return id;
     }
