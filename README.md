@@ -8,3 +8,6 @@
 
 2. через maven, командой 
     `mvn spring-boot:run`
+
+Документация API реализована с помощью Swagger
+http://localhost:8888/swagger-ui.html
