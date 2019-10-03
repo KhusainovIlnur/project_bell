@@ -13,14 +13,19 @@ INSERT INTO Office (id, version, organization_id, name, address, phone, is_activ
 INSERT INTO Office (id, version, organization_id, name, address, phone, is_active) VALUES (6, 0, 3, 'Салон-магазин Мегафон на Ленина', 'Уфа, ул. Ленина, 26', '8(927)784-12-34', true);
 INSERT INTO Office (id, version, organization_id, name, address, phone, is_active) VALUES (7, 0, 4, 'Салон-магазин Теле2', 'село Актаныш, просп. Ленина, 38', '8(900)427-87-11', false);
 
-INSERT INTO User (id, version, office_id, first_name, second_name, middle_name, position, phone, is_identified) VALUES (1, 0, 1, 'Регина', 'Антипина', 'Вячеславовна', 'Продавец-консультант', '89174587589', true);
-INSERT INTO User (id, version, office_id, first_name, second_name, middle_name, position, phone, is_identified) VALUES (2, 0, 1, 'Сергей', 'Смирнов', 'Андреевич', 'Менеджер', '8(917)6597588', false);
-INSERT INTO User (id, version, office_id, first_name, second_name, middle_name, position, phone, is_identified) VALUES (3, 0, 2, 'Артём', 'Антонов', 'Викторович', 'Продавец-консультант', '8(917)1235487', true);
-INSERT INTO User (id, version, office_id, first_name, second_name, middle_name, position, phone, is_identified) VALUES (4, 0, 2, 'Валерия', 'Иванова', 'Климовна', 'Менеджер', '8(962)1114723', false);
-INSERT INTO User (id, version, office_id, first_name, second_name, middle_name, position, phone, is_identified) VALUES (5, 0, 3, 'Айгуль', 'Хасанова', 'Вадимовна', 'Менеджер', '8(937)3336411', true);
-INSERT INTO User (id, version, office_id, first_name, second_name, middle_name, position, phone, is_identified) VALUES (6, 0, 3, 'Петр', 'Жуков', 'Денисович', 'Продавец-консультант', '8(927)1265800', true);
-INSERT INTO User (id, version, office_id, first_name, second_name, middle_name, position, phone, is_identified) VALUES (7, 0, 4, 'Булат', 'Анваров', 'Рамилевич', 'Продавец-консультант', '8(900)0002874', true);
-INSERT INTO User (id, version, office_id, first_name, second_name, middle_name, position, phone, is_identified) VALUES (8, 0, 4, 'Элина', 'Хабирова', 'Ураловна', 'Менеджер', '8(900)2356412', false);
+INSERT INTO Country (id, version, country_code, country_name) VALUES (1, 0, 643, 'Россия');
+INSERT INTO Country (id, version, country_code, country_name) VALUES (2, 0, 112, 'Беларусь');
+INSERT INTO Country (id, version, country_code, country_name) VALUES (3, 0, 804, 'Украина');
+INSERT INTO Country (id, version, country_code, country_name) VALUES (4, 0, 398, 'Казахстан');
+
+INSERT INTO User (id, version, office_id, first_name, second_name, middle_name, position, phone, country_id, is_identified) VALUES (1, 0, 1, 'Регина', 'Антипина', 'Вячеславовна', 'Продавец-консультант', '89174587589', 2, true);
+INSERT INTO User (id, version, office_id, first_name, second_name, middle_name, position, phone, country_id, is_identified) VALUES (2, 0, 1, 'Сергей', 'Смирнов', 'Андреевич', 'Менеджер', '8(917)6597588', 1, false);
+INSERT INTO User (id, version, office_id, first_name, second_name, middle_name, position, phone, country_id, is_identified) VALUES (3, 0, 2, 'Артём', 'Антонов', 'Викторович', 'Продавец-консультант', '8(917)1235487', 1, true);
+INSERT INTO User (id, version, office_id, first_name, second_name, middle_name, position, phone, country_id, is_identified) VALUES (4, 0, 2, 'Валерия', 'Иванова', 'Климовна', 'Менеджер', '8(962)1114723', 3, false);
+INSERT INTO User (id, version, office_id, first_name, second_name, middle_name, position, phone, country_id, is_identified) VALUES (5, 0, 3, 'Айгуль', 'Хасанова', 'Вадимовна', 'Менеджер', '8(937)3336411', 1, true);
+INSERT INTO User (id, version, office_id, first_name, second_name, middle_name, position, phone, country_id, is_identified) VALUES (6, 0, 3, 'Петр', 'Жуков', 'Денисович', 'Продавец-консультант', '8(927)1265800', 1, true);
+INSERT INTO User (id, version, office_id, first_name, second_name, middle_name, position, phone, country_id, is_identified) VALUES (7, 0, 4, 'Булат', 'Анваров', 'Рамилевич', 'Продавец-консультант', '8(900)0002874', 1, true);
+INSERT INTO User (id, version, office_id, first_name, second_name, middle_name, position, phone, country_id, is_identified) VALUES (8, 0, 4, 'Элина', 'Хабирова', 'Ураловна', 'Менеджер', '8(900)2356412', 4, false);
 
 INSERT INTO Document_type (id, version, doc_code, doc_name) VALUES (1, 0, 21, 'Паспорт гражданина Российской Федерации');
 INSERT INTO Document_type (id, version, doc_code, doc_name) VALUES (2, 0, 3, 'Свидетельство о рождении');
@@ -35,11 +40,3 @@ INSERT INTO Document (user_id, version, document_type_id, doc_number, doc_date) 
 INSERT INTO Document (user_id, version, document_type_id, doc_number, doc_date) VALUES (7, 0, 3, 2563254, '2016-03-28');
 INSERT INTO Document (user_id, version, document_type_id, doc_number, doc_date) VALUES (8, 0, 2, 214758, '1995-01-07');
 
-INSERT INTO Country (user_id, version, country_code, country_name) VALUES (1, 0, 112, 'Беларусь');
-INSERT INTO Country (user_id, version, country_code, country_name) VALUES (2, 0, 643, 'Россия');
-INSERT INTO Country (user_id, version, country_code, country_name) VALUES (3, 0, 643, 'Россия');
-INSERT INTO Country (user_id, version, country_code, country_name) VALUES (4, 0, 804, 'Украина');
-INSERT INTO Country (user_id, version, country_code, country_name) VALUES (5, 0, 643, 'Россия');
-INSERT INTO Country (user_id, version, country_code, country_name) VALUES (6, 0, 643, 'Россия');
-INSERT INTO Country (user_id, version, country_code, country_name) VALUES (7, 0, 643, 'Россия');
-INSERT INTO Country (user_id, version, country_code, country_name) VALUES (8, 0, 398, 'Казахстан');

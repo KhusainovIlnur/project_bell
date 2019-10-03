@@ -1,10 +1,9 @@
-package project.khusainov.handbook.doc.service;
+package project.khusainov.handbook.doc.dao;
 
 import project.khusainov.handbook.doc.view.DocView;
 import project.khusainov.user.model.DocumentType;
 
-public interface DocService {
+public interface DocDao {
     public DocumentType getDocByCode(Integer docCode);
     public DocumentType getDocByName(String docName);
-
 }

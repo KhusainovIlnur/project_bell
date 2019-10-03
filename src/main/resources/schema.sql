@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS User (
     middle_name     VARCHAR(15)              COMMENT 'Отчество пользователя',
     position        VARCHAR(20) NOT NULL     COMMENT 'Должность пользователя',
     phone           VARCHAR(18)              COMMENT 'Телефон организации',
+    country_id      LONG                     COMMENT 'Служебное поле hibernate',
     is_identified   BOOLEAN                  COMMENT 'Определение пользователя'
 
 );
@@ -57,9 +58,8 @@ COMMENT ON TABLE Document IS 'Документ пользователя';
 CREATE INDEX IX_Document_User_id ON Document (user_id);
 ALTER TABLE Document ADD FOREIGN KEY (user_id) REFERENCES User(id);
 
-
 CREATE TABLE IF NOT EXISTS Document_type (
-     id              LONG                     COMMENT 'Уникальный идентификатор типа документа' PRIMARY KEY AUTO_INCREMENT,
+     id              LONG                     COMMENT 'Уникальный идентификатор (суррогатный ключ)' PRIMARY KEY AUTO_INCREMENT,
      version         INTEGER NOT NULL         COMMENT 'Служебное поле hibernate',
      doc_code        INTEGER                  COMMENT 'Код документа',
      doc_name        VARCHAR(100)             COMMENT 'Название документа'
@@ -71,7 +71,7 @@ CREATE INDEX IX_Document_type_id ON Document_type (id);
 ALTER TABLE Document ADD FOREIGN KEY (document_type_id) REFERENCES Document_type(id);
 
 CREATE TABLE IF NOT EXISTS Country (
-    user_id         LONG                     COMMENT 'Уникальный идентификатор пользователя' PRIMARY KEY,
+    id              LONG                     COMMENT 'Уникальный идентификатор (суррогатный ключ)' PRIMARY KEY AUTO_INCREMENT,
     version         INTEGER NOT NULL         COMMENT 'Служебное поле hibernate',
     country_code    INTEGER                  COMMENT 'Код страны',
     country_name    VARCHAR(50)              COMMENT 'Название страны'
@@ -79,5 +79,5 @@ CREATE TABLE IF NOT EXISTS Country (
 );
 COMMENT ON TABLE Country IS 'Справочник стран';
 
-CREATE INDEX IX_Country_User_id ON Country (user_id);
-ALTER TABLE Country ADD FOREIGN KEY (user_id) REFERENCES User(id);
+CREATE INDEX IX_User_Country_id ON User (country_id);
+ALTER TABLE User ADD FOREIGN KEY (country_id) REFERENCES Country(id);
