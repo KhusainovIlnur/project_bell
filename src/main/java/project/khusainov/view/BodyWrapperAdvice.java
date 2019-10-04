@@ -11,8 +11,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 @RestControllerAdvice("project.khusainov")
 public class BodyWrapperAdvice implements ResponseBodyAdvice<Object> {
 
-    private ResultView resultView;
-    private SuccessView successView;
+    private DataView resultView;
+    private ResultView successView;
 
     @Override
     public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
@@ -25,10 +25,10 @@ public class BodyWrapperAdvice implements ResponseBodyAdvice<Object> {
             return o;
         }
         if (o == null) {
-            return new SuccessView("success");
+            return new ResultView("success");
         }
         else {
-            return new ResultView(o);
+            return new DataView(o);
         }
     }
 }

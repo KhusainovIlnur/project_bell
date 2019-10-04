@@ -1,18 +1,19 @@
 package project.khusainov.user.model;
 
+import project.khusainov.handbook.country.model.Country;
+import project.khusainov.handbook.doc.model.Document;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Version;
 import javax.persistence.OneToOne;
-import javax.persistence.FetchType;
-import javax.persistence.CascadeType;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.validation.constraints.Min;
+import javax.persistence.Version;
 
 @Entity(name = "User")
 public class User {
@@ -115,6 +116,7 @@ public class User {
 
     public void setDocument(Document document) {
         this.document = document;
+        document.setUser(this);
     }
 
     public Long getOfficeId() {

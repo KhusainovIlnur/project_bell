@@ -13,20 +13,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.khusainov.exception.BadRequestException;
+import project.khusainov.exception.NotFoundException;
 import project.khusainov.user.service.UserService;
 import project.khusainov.user.view.UserByIdRespView;
 import project.khusainov.user.view.UserListReqView;
 import project.khusainov.user.view.UserListRespView;
 import project.khusainov.user.view.UserSaveReqView;
 import project.khusainov.user.view.UserUpdateReqView;
-import project.khusainov.view.SuccessView;
+import project.khusainov.view.ResultView;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @Api(value = "UserController")
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 
     private final UserService userService;
@@ -54,22 +55,19 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = UserByIdRespView.class)
     })
-    @GetMapping("/{id}")
-    public UserByIdRespView getById(@PathVariable String id) {
-        Long convertToLong;
-        try {
-            convertToLong = Long.valueOf(id);
+    @GetMapping("/{id:[\\d]+}")
+    public UserByIdRespView getById(@PathVariable Long id) {
+        if (userService.getUserById(id) == null) {
+            throw new NotFoundException("Пользователь с таким id не найден");
         }
-        catch (NumberFormatException e) {
-            throw new BadRequestException("id must be long: " + id);
+        else {
+            return userService.getUserById(id);
         }
-        return userService.getUserById(convertToLong);
-
     }
 
-    @ApiOperation(value = "Добавить организацию", httpMethod = "POST")
+    @ApiOperation(value = "Добавить пользователя", httpMethod = "POST")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = SuccessView.class)
+            @ApiResponse(code = 200, message = "Success", response = ResultView.class)
     })
     @PostMapping("/save")
     public void save(@Valid @RequestBody UserSaveReqView userSaveReqView, BindingResult bindingResult) {
@@ -83,7 +81,7 @@ public class UserController {
 
     @ApiOperation(value = "Обновить пользователя", httpMethod = "POST")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = SuccessView.class)
+            @ApiResponse(code = 200, message = "Success", response = ResultView.class)
     })
     @PostMapping("/update")
     public void update(@Valid @RequestBody UserUpdateReqView userUpdateReqView, BindingResult bindingResult) {

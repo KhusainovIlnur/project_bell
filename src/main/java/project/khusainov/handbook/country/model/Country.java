@@ -1,9 +1,10 @@
-package project.khusainov.user.model;
+package project.khusainov.handbook.country.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
@@ -13,6 +14,7 @@ import javax.persistence.Version;
 @Entity(name = "Country")
 public class Country {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -26,12 +28,6 @@ public class Country {
     private String countryName;
 
     public Country() {
-    }
-
-    public Country(Long id, Integer countryCode, String countryName) {
-        this.id = id;
-        this.countryCode = countryCode;
-        this.countryName = countryName;
     }
 
     public Long getId() {

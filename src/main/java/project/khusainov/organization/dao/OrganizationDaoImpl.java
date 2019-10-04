@@ -116,14 +116,16 @@ public class OrganizationDaoImpl implements OrganizationDao {
                 .set(organization.get("fullName"),  organizationUpdateReqView.fullName)
                 .set(organization.get("inn"),       organizationUpdateReqView.inn)
                 .set(organization.get("kpp"),       organizationUpdateReqView.kpp)
-                .set(organization.get("address"),   organizationUpdateReqView.address)
-                .set(organization.get("phone"),     organizationUpdateReqView.phone)
-                .set(organization.get("isActive"),  organizationUpdateReqView.isActive);
-
-        criteriaUpdate
-                .where(criteriaBuilder.equal(organization.get("id"), organizationUpdateReqView.id)
+                .set(organization.get("address"),   organizationUpdateReqView.address);
+        if (organizationUpdateReqView.phone != null){
+            criteriaUpdate.set(organization.get("phone"), organizationUpdateReqView.phone);
+        }
+        if (organizationUpdateReqView.isActive != null){
+            criteriaUpdate.set(organization.get("isActive"), organizationUpdateReqView.isActive);
+        }
+        criteriaUpdate.where(
+                criteriaBuilder.equal(organization.get("id"), organizationUpdateReqView.id)
         );
-
         em.createQuery(criteriaUpdate).executeUpdate();
     }
 }

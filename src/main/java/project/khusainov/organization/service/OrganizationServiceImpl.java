@@ -3,6 +3,7 @@ package project.khusainov.organization.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.khusainov.exception.NotFoundException;
 import project.khusainov.organization.dao.OrganizationDao;
 import project.khusainov.organization.model.Organization;
 import project.khusainov.organization.view.OrganizationByIdRespView;

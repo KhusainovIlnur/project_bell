@@ -3,6 +3,7 @@ package project.khusainov.office.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.khusainov.exception.NotFoundException;
 import project.khusainov.office.dao.OfficeDao;
 import project.khusainov.office.model.Office;
 import project.khusainov.office.view.OfficeByIdRespView;
@@ -10,6 +11,7 @@ import project.khusainov.office.view.OfficeListReqView;
 import project.khusainov.office.view.OfficeListRespView;
 import project.khusainov.office.view.OfficeSaveReqView;
 import project.khusainov.office.view.OfficeUpdateReqView;
+import project.khusainov.organization.service.OrganizationService;
 
 import java.util.List;
 
@@ -19,6 +21,9 @@ import java.util.List;
 @Service
 public class OfficeServiceImpl implements OfficeService {
     private OfficeDao dao;
+
+    @Autowired
+    private OrganizationService organizationService;
 
     @Autowired
     public OfficeServiceImpl(OfficeDao dao) {
@@ -49,6 +54,9 @@ public class OfficeServiceImpl implements OfficeService {
     @Override
     @Transactional
     public void saveOffice(OfficeSaveReqView officeSaveReqView) {
+        if (organizationService.getOrganizationById(officeSaveReqView.orgId) == null) {
+            throw new NotFoundException("Организация с таким id не найдена");
+        }
         Office office = new Office
                 (
                         officeSaveReqView.orgId,

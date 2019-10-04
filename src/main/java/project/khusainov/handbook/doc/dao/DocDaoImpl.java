@@ -1,7 +1,8 @@
 package project.khusainov.handbook.doc.dao;
 
 import org.springframework.stereotype.Repository;
-import project.khusainov.user.model.DocumentType;
+import project.khusainov.handbook.doc.model.DocumentType;
+import project.khusainov.handbook.doc.view.DocView;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -21,6 +22,7 @@ public class DocDaoImpl implements DocDao {
 
     @Override
     public DocumentType getDocByCode(Integer docCode) {
+        if (docCode == null) return null;
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<DocumentType> criteriaQuery = criteriaBuilder.createQuery(DocumentType.class); // какого типа возвращаются
         Root<DocumentType> documentType = criteriaQuery.from(DocumentType.class); // откуда берем
@@ -39,6 +41,7 @@ public class DocDaoImpl implements DocDao {
 
     @Override
     public DocumentType getDocByName(String docName) {
+        if (docName == null) return null;
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<DocumentType> criteriaQuery = criteriaBuilder.createQuery(DocumentType.class); // какого типа возвращаются
         Root<DocumentType> documentType = criteriaQuery.from(DocumentType.class); // откуда берем
@@ -53,5 +56,19 @@ public class DocDaoImpl implements DocDao {
         List<DocumentType> documentTypes = query.getResultList();
 
         return documentTypes.size() > 0 ? documentTypes.get(0) : null;
+    }
+
+    @Override
+    public List<DocView> getList() {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<DocView> criteriaQuery = criteriaBuilder.createQuery(DocView.class); // какого типа возвращаются
+        Root<DocumentType> documentType = criteriaQuery.from(DocumentType.class); // откуда берем
+
+        criteriaQuery.multiselect(
+                documentType.get("docName"),
+                documentType.get("docCode")
+        );
+        TypedQuery<DocView> query = em.createQuery(criteriaQuery);
+        return query.getResultList();
     }
 }

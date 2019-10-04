@@ -13,20 +13,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.khusainov.exception.BadRequestException;
+import project.khusainov.exception.NotFoundException;
 import project.khusainov.office.service.OfficeService;
 import project.khusainov.office.view.OfficeByIdRespView;
 import project.khusainov.office.view.OfficeListReqView;
 import project.khusainov.office.view.OfficeListRespView;
 import project.khusainov.office.view.OfficeSaveReqView;
 import project.khusainov.office.view.OfficeUpdateReqView;
-import project.khusainov.view.SuccessView;
+import project.khusainov.view.ResultView;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @Api(value = "OfficeController")
 @RestController
-@RequestMapping("office")
+@RequestMapping("/api/office")
 public class OfficeController {
 
     private final OfficeService officeService;
@@ -54,22 +55,19 @@ public class OfficeController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = OfficeByIdRespView.class)
     })
-    @GetMapping("/{id}")
-    public OfficeByIdRespView getById(@PathVariable String id) {
-        Long convertToLong;
-        try {
-            convertToLong = Long.valueOf(id);
+    @GetMapping("/{id:[\\d]+}")
+    public OfficeByIdRespView getById(@PathVariable Long id) {
+        if (officeService.getOfficeById(id) == null) {
+            throw new NotFoundException("Офис с таким id не найден");
         }
-        catch (NumberFormatException e) {
-            throw new BadRequestException("id must be long: " + id);
+        else {
+            return officeService.getOfficeById(id);
         }
-        return officeService.getOfficeById(convertToLong);
-
     }
 
     @ApiOperation(value = "Добавить офис", httpMethod = "POST")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = SuccessView.class)
+            @ApiResponse(code = 200, message = "Success", response = ResultView.class)
     })
     @PostMapping("/save")
     public void save(@Valid @RequestBody OfficeSaveReqView officeSaveReqView, BindingResult bindingResult) {
@@ -83,7 +81,7 @@ public class OfficeController {
 
     @ApiOperation(value = "Обновить офис", httpMethod = "POST")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = SuccessView.class)
+            @ApiResponse(code = 200, message = "Success", response = ResultView.class)
     })
     @PostMapping("/update")
     public void update(@Valid @RequestBody OfficeUpdateReqView officeUpdateReqView, BindingResult bindingResult) {

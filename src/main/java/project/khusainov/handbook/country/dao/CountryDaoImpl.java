@@ -1,7 +1,10 @@
 package project.khusainov.handbook.country.dao;
 
 import org.springframework.stereotype.Repository;
-import project.khusainov.user.model.Country;
+import project.khusainov.handbook.country.model.Country;
+import project.khusainov.handbook.country.view.CountryView;
+import project.khusainov.handbook.doc.model.DocumentType;
+import project.khusainov.handbook.doc.view.DocView;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -21,6 +24,7 @@ public class CountryDaoImpl implements CountryDao {
 
     @Override
     public Country getCountryByCode(Integer countryCode) {
+        if (countryCode == null) return null;
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<Country> criteriaQuery = criteriaBuilder.createQuery(Country.class); // какого типа возвращаются
         Root<Country> documentType = criteriaQuery.from(Country.class); // откуда берем
@@ -39,6 +43,7 @@ public class CountryDaoImpl implements CountryDao {
 
     @Override
     public Country getCountryByName(String countryName) {
+        if (countryName == null) return null;
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<Country> criteriaQuery = criteriaBuilder.createQuery(Country.class); // какого типа возвращаются
         Root<Country> documentType = criteriaQuery.from(Country.class); // откуда берем
@@ -53,5 +58,19 @@ public class CountryDaoImpl implements CountryDao {
         List<Country> documentTypes = query.getResultList();
 
         return documentTypes.size() > 0 ? documentTypes.get(0) : null;
+    }
+
+    @Override
+    public List<CountryView> getList() {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<CountryView> criteriaQuery = criteriaBuilder.createQuery(CountryView.class); // какого типа возвращаются
+        Root<Country> documentType = criteriaQuery.from(Country.class); // откуда берем
+
+        criteriaQuery.multiselect(
+                documentType.get("countryName"),
+                documentType.get("countryCode")
+        );
+        TypedQuery<CountryView> query = em.createQuery(criteriaQuery);
+        return query.getResultList();
     }
 }

@@ -1,5 +1,6 @@
 package project.khusainov.office.service;
 
+import project.khusainov.office.model.Office;
 import project.khusainov.office.view.OfficeByIdRespView;
 import project.khusainov.office.view.OfficeListReqView;
 import project.khusainov.office.view.OfficeListRespView;

@@ -1,11 +1,14 @@
 package project.khusainov.office.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import project.khusainov.exception.NotFoundException;
 import project.khusainov.office.model.Office;
 import project.khusainov.office.view.OfficeByIdRespView;
 import project.khusainov.office.view.OfficeListReqView;
 import project.khusainov.office.view.OfficeListRespView;
 import project.khusainov.office.view.OfficeUpdateReqView;
+import project.khusainov.organization.service.OrganizationService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -24,6 +27,7 @@ import java.util.List;
 public class OfficeDaoImpl implements OfficeDao {
     private final EntityManager em;
 
+    @Autowired
     public OfficeDaoImpl(EntityManager em) {
         this.em = em;
     }
@@ -112,14 +116,16 @@ public class OfficeDaoImpl implements OfficeDao {
         criteriaUpdate
                 .set(office.get("id"),        officeUpdateReqView.id)
                 .set(office.get("name"),      officeUpdateReqView.name)
-                .set(office.get("address"),   officeUpdateReqView.address)
-                .set(office.get("phone"),     officeUpdateReqView.phone)
-                .set(office.get("isActive"),  officeUpdateReqView.isActive);
-
-        criteriaUpdate
-                .where(criteriaBuilder.equal(office.get("id"), officeUpdateReqView.id)
-                );
-
+                .set(office.get("address"),   officeUpdateReqView.address);
+        if (officeUpdateReqView.phone != null) {
+            criteriaUpdate.set(office.get("phone"), officeUpdateReqView.phone);
+        }
+        if (officeUpdateReqView.isActive != null) {
+            criteriaUpdate.set(office.get("isActive"), officeUpdateReqView.isActive);
+        }
+        criteriaUpdate.where(
+                criteriaBuilder.equal(office.get("id"), officeUpdateReqView.id)
+        );
         em.createQuery(criteriaUpdate).executeUpdate();
     }
 }

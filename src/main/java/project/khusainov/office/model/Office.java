@@ -67,6 +67,9 @@ public class Office {
     @JoinColumn(name = "office_id")
     private List<User> users;
 
+    public Office() {
+    }
+
     public Office(Long orgId, String name, String address, String phone, Boolean isActive) {
         this.orgId = orgId;
         this.name = name;

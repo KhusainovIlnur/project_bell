@@ -3,18 +3,14 @@ package project.khusainov.handbook.doc.view;
 import io.swagger.annotations.ApiModelProperty;
 
 public class DocView {
-    @ApiModelProperty(value = "Id типа документа", example = "1")
-    public Long id;
+    @ApiModelProperty(value = "Название документа", example = "Паспорт гражданина Российской Федерации")
+    public String name;
 
     @ApiModelProperty(value = "Код документа", example = "21")
-    public Integer docCode;
+    public Integer code;
 
-    @ApiModelProperty(value = "Название документа", example = "Паспорт гражданина Российской Федерации")
-    public String docName;
-
-    public DocView(Long id, Integer docCode, String docName) {
-        this.id = id;
-        this.docCode = docCode;
-        this.docName = docName;
+    public DocView(String name, Integer code) {
+        this.name = name;
+        this.code = code;
     }
 }

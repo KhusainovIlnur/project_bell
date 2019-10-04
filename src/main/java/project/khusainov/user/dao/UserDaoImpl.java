@@ -2,11 +2,13 @@ package project.khusainov.user.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import project.khusainov.exception.NotFoundException;
 import project.khusainov.handbook.country.service.CountryService;
 import project.khusainov.handbook.doc.service.DocService;
-import project.khusainov.user.model.Country;
-import project.khusainov.user.model.Document;
-import project.khusainov.user.model.DocumentType;
+import project.khusainov.office.service.OfficeService;
+import project.khusainov.handbook.country.model.Country;
+import project.khusainov.handbook.doc.model.Document;
+import project.khusainov.handbook.doc.model.DocumentType;
 import project.khusainov.user.model.User;
 import project.khusainov.user.view.UserByIdRespView;
 import project.khusainov.user.view.UserListReqView;
@@ -18,7 +20,6 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
@@ -37,6 +38,9 @@ public class UserDaoImpl implements UserDao {
 
     @Autowired
     private CountryService countryService;
+
+    @Autowired
+    private OfficeService officeService;
 
     public UserDaoImpl(EntityManager em) {
         this.em = em;
@@ -140,25 +144,46 @@ public class UserDaoImpl implements UserDao {
     }
 
     private void updateUser(UserUpdateReqView userUpdateReqView) {
-        Country country = countryService.getCountryByCode(userUpdateReqView.citizenshipCode);
+        Long officeId = officeService.getOfficeById(userUpdateReqView.officeId).id;
+        if (userUpdateReqView.officeId != null && officeId == null) {
+            throw new NotFoundException("Офис с таким id не найден");
+        }
+        Country countryByCode = countryService.getCountryByCode(userUpdateReqView.citizenshipCode);
+        if (userUpdateReqView.citizenshipCode != null && countryByCode == null) {
+            throw new NotFoundException("Страна с таким кодом не найдена");
+        }
 
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaUpdate<User> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(User.class); // что обновляем
         Root<User> user = criteriaUpdate.from(User.class); // откуда берем
 
+        // изменение обязательных параметров запроа
         criteriaUpdate
-                .set(user.get("officeId"),      userUpdateReqView.officeId)
                 .set(user.get("firstName"),     userUpdateReqView.firstName)
-                .set(user.get("secondName"),    userUpdateReqView.secondName)
-                .set(user.get("middleName"),    userUpdateReqView.middleName)
-                .set(user.get("position"),      userUpdateReqView.position)
-                .set(user.get("phone"),         userUpdateReqView.phone)
-                .set(user.get("country"),       country)
-                .set(user.get("isIdentified"),  userUpdateReqView.isIdentified);
+                .set(user.get("position"),      userUpdateReqView.position);
+        // необязательные параметры, изменяем только, если они указаны
+        if (officeId != null) {
+            criteriaUpdate.set(user.get("officeId"), userUpdateReqView.officeId);
+        }
+        if (userUpdateReqView.secondName != null) {
+            criteriaUpdate.set(user.get("secondName"), userUpdateReqView.secondName);
+        }
+        if (userUpdateReqView.middleName != null) {
+            criteriaUpdate.set(user.get("middleName"), userUpdateReqView.middleName);
+        }
+        if (userUpdateReqView.phone != null) {
+            criteriaUpdate.set(user.get("phone"), userUpdateReqView.phone);
+        }
+        if (countryByCode != null) {
+            criteriaUpdate.set(user.get("country"), countryByCode);
+        }
+        if (userUpdateReqView.isIdentified != null){
+            criteriaUpdate.set(user.get("isIdentified"), userUpdateReqView.isIdentified);
+        }
 
         criteriaUpdate.where(
                 criteriaBuilder.equal(user.get("id"), userUpdateReqView.id)
-            );
+        );
 
         em.createQuery(criteriaUpdate).executeUpdate();
     }
@@ -166,18 +191,28 @@ public class UserDaoImpl implements UserDao {
     private void updateDocument(UserUpdateReqView userUpdateReqView) {
         DocumentType documentType = docService.getDocByName(userUpdateReqView.docName);
 
+        if (userUpdateReqView.docName != null && documentType == null) {
+            throw new NotFoundException("Документ с таким именем не найден");
+        }
+
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaUpdate<Document> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(Document.class); // что обновляем
         Root<Document> document = criteriaUpdate.from(Document.class); // откуда берем
 
-        criteriaUpdate
-                .set(document.get("docNumber"), userUpdateReqView.docNumber)
-                .set(document.get("documentType"), documentType)
-                .set(document.get("docDate"),   userUpdateReqView.docDate);
+        // необязательные параметры, изменяем только, если они указаны
+        if (documentType != null) {
+            criteriaUpdate.set(document.get("documentType"), documentType);
+        }
+        if (userUpdateReqView.docNumber != null) {
+            criteriaUpdate.set(document.get("docNumber"), userUpdateReqView.docNumber);
+        }
+        if (userUpdateReqView.docDate != null) {
+            criteriaUpdate.set(document.get("docDate"), userUpdateReqView.docDate);
+        }
 
-        criteriaUpdate
-                .where(criteriaBuilder.equal(document.get("userId"), userUpdateReqView.id)
-                );
+        criteriaUpdate.where(
+                criteriaBuilder.equal(document.get("userId"), userUpdateReqView.id)
+        );
 
         em.createQuery(criteriaUpdate).executeUpdate();
     }

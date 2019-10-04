@@ -1,9 +1,11 @@
-package project.khusainov.user.model;
+package project.khusainov.handbook.doc.model;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
@@ -16,6 +18,7 @@ import java.util.List;
 @Entity(name = "Document_type")
 public class DocumentType {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -28,17 +31,7 @@ public class DocumentType {
     @Column(name = "doc_name", length = 100)
     private String docName;
 
-//    @OneToMany(mappedBy="documentType", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Document> document;
-
-
     public DocumentType() {
-    }
-
-    public DocumentType(Long id, Integer docCode, String docName) {
-        this.id = id;
-        this.docCode = docCode;
-        this.docName = docName;
     }
 
     public Long getId() {
@@ -64,14 +57,6 @@ public class DocumentType {
     public void setDocName(String docName) {
         this.docName = docName;
     }
-
-/*    public Document getDocument() {
-        return document;
-    }
-
-    public void setDocument(Document document) {
-        this.document = document;
-    }*/
 
     public Integer getVersion() {
         return version;

@@ -13,20 +13,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.khusainov.exception.BadRequestException;
+import project.khusainov.exception.NotFoundException;
 import project.khusainov.organization.service.OrganizationService;
 import project.khusainov.organization.view.OrganizationByIdRespView;
 import project.khusainov.organization.view.OrganizationListReqView;
 import project.khusainov.organization.view.OrganizationListRespView;
 import project.khusainov.organization.view.OrganizationSaveReqView;
 import project.khusainov.organization.view.OrganizationUpdateReqView;
-import project.khusainov.view.SuccessView;
+import project.khusainov.view.ResultView;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @Api(value = "OrganizationController")
 @RestController
-@RequestMapping("/organization")
+@RequestMapping("/api/organization")
 public class OrganizationController {
 
     private final OrganizationService organizationService;
@@ -54,22 +55,20 @@ public class OrganizationController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = OrganizationByIdRespView.class)
     })
-    @GetMapping("/{id}")
-    public OrganizationByIdRespView getById(@PathVariable String id) {
-        Long convertToLong;
-        try {
-            convertToLong = Long.valueOf(id);
+    @GetMapping("/{id:[\\d]+}")
+    public OrganizationByIdRespView getById(@PathVariable Long id) {
+        if (organizationService.getOrganizationById(id) == null) {
+            throw new NotFoundException("Организация с таким id не найдена");
         }
-        catch (NumberFormatException e) {
-            throw new BadRequestException("id must be long: " + id);
+        else {
+            return organizationService.getOrganizationById(id);
         }
-        return organizationService.getOrganizationById(convertToLong);
 
     }
 
     @ApiOperation(value = "Добавить организацию", httpMethod = "POST")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = SuccessView.class)
+            @ApiResponse(code = 200, message = "Success", response = ResultView.class)
     })
     @PostMapping("/save")
     public void save(@Valid @RequestBody OrganizationSaveReqView organizationSaveReqView, BindingResult bindingResult) {
@@ -83,7 +82,7 @@ public class OrganizationController {
 
     @ApiOperation(value = "Обновить организацию", httpMethod = "POST")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = SuccessView.class)
+            @ApiResponse(code = 200, message = "Success", response = ResultView.class)
     })
     @PostMapping("/update")
     public void update(@Valid @RequestBody OrganizationUpdateReqView organizationUpdateReqView, BindingResult bindingResult) {

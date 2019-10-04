@@ -3,18 +3,14 @@ package project.khusainov.handbook.country.view;
 import io.swagger.annotations.ApiModelProperty;
 
 public class CountryView {
-    @ApiModelProperty(value = "Id страны из справочника", example = "1")
-    public Long id;
+    @ApiModelProperty(value = "Название страны", example = "Россия")
+    public String name;
 
     @ApiModelProperty(value = "Код страны", example = "643")
-    public Integer countryCode;
+    public Integer code;
 
-    @ApiModelProperty(value = "Название страны", example = "Россия")
-    public String countryName;
-
-    public CountryView(Long id, Integer countryCode, String countryName) {
-        this.id = id;
-        this.countryCode = countryCode;
-        this.countryName = countryName;
+    public CountryView(String name, Integer code) {
+        this.name = name;
+        this.code = code;
     }
 }

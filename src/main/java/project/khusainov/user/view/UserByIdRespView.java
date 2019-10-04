@@ -44,6 +44,9 @@ public class UserByIdRespView {
     @ApiModelProperty(value = "Определение пользователя", example = "true")
     public Boolean isIdentified;
 
+    public UserByIdRespView() {
+    }
+
     public UserByIdRespView(Long officeId, String firstName, String secondName, String middleName, String position, String phone, String docName, String docNumber, Date docDate, String citizenshipName, Integer citizenshipCode, Boolean isIdentified) {
         this.officeId = officeId;
         this.firstName = firstName;

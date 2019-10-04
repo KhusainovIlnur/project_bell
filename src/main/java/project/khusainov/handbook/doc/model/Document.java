@@ -1,4 +1,6 @@
-package project.khusainov.user.model;
+package project.khusainov.handbook.doc.model;
+
+import project.khusainov.user.model.User;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

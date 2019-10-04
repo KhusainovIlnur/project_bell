@@ -1,20 +1,17 @@
 package project.khusainov.view;
 
 public class ResultView {
-    private Object data;
+    private String result;
 
-    public ResultView() {
+    public ResultView(String result) {
+        this.result = result;
     }
 
-    public ResultView(Object data) {
-        this.data = data;
+    public String getResult() {
+        return result;
     }
 
-    public Object getData() {
-        return data;
-    }
-
-    public void setData(Object data) {
-        this.data = data;
+    public void setResult(String result) {
+        this.result = result;
     }
 }
