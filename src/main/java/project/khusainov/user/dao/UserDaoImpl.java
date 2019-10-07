@@ -9,6 +9,7 @@ import project.khusainov.office.service.OfficeService;
 import project.khusainov.handbook.country.model.Country;
 import project.khusainov.handbook.doc.model.Document;
 import project.khusainov.handbook.doc.model.DocumentType;
+import project.khusainov.office.view.OfficeByIdRespView;
 import project.khusainov.user.model.User;
 import project.khusainov.user.view.UserByIdRespView;
 import project.khusainov.user.view.UserListReqView;
@@ -144,7 +145,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     private void updateUser(UserUpdateReqView userUpdateReqView) {
-        Long officeId = officeService.getOfficeById(userUpdateReqView.officeId).id;
+        OfficeByIdRespView officeId = officeService.getOfficeById(userUpdateReqView.officeId);
         if (userUpdateReqView.officeId != null && officeId == null) {
             throw new NotFoundException("Офис с таким id не найден");
         }

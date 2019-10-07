@@ -2,7 +2,6 @@ INSERT INTO Organization (id, version, name, full_name, inn, kpp, address, phone
 INSERT INTO Organization (id, version, name, full_name, inn, kpp, address, phone, is_active) VALUES (2, 0, 'Билайн', 'ПАО "Вымпелком"', 7713076301, 771301001, '127083, г. Москва, улица 8 Марта, дом 10', '8(800)700-06-11', true);
 INSERT INTO Organization (id, version, name, full_name, inn, kpp, address, phone, is_active) VALUES (3, 0, 'Мегафон', 'ПАО "МЕГАФОН"', 7812014560, 770701001, '127006, г. Москва, Оружейный переулок, дом 41', '8(800)550-05-00', true);
 INSERT INTO Organization (id, version, name, full_name, inn, kpp, address, phone, is_active) VALUES (4, 0, 'Теле2', 'ООО "Т2 МОБАЙЛ"', 7743895280, 775101001, '108811, г. Москва, километр Киевское шоссе 22-й, дом 6', '8(800)555-06-11', false);
-
 INSERT INTO Organization (id, version, name, full_name, inn, kpp, address, phone, is_active) VALUES (5, 0, 'МТС', 'ПАО "МТС"', 8840000076, 770901001, '109147, г. Москва, Марксистская улица, 4', '8(800)250-08-90', false);
 
 INSERT INTO Office (id, version, organization_id, name, address, phone, is_active) VALUES (1, 0, 1, 'Салон-магазин МТС на Шафиева', 'Уфа, ул. Шафиева, 39/2', '8917456-25-69', true);
