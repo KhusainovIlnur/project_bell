@@ -86,7 +86,7 @@ public class UserControllerTest {
         // получение существующего пользователя по id
         mockMvc.perform(get("/api/user/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.officeId").value("1"))
+                .andExpect(jsonPath("$.data.id").value("1"))
                 .andExpect(jsonPath("$.data.firstName").value("Регина"))
                 .andExpect(jsonPath("$.data.secondName").value("Антипина"))
                 .andExpect(jsonPath("$.data.middleName").value("Вячеславовна"))
