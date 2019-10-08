@@ -7,8 +7,8 @@ import java.util.Date;
 
 public class UserByIdRespView {
 
-    @ApiModelProperty(value = "Id офиса", example = "1")
-    public Long officeId;
+    @ApiModelProperty(value = "Id пользователя", example = "1")
+    public Long id;
 
     @ApiModelProperty(value = "Имя пользователя", example = "Сергей")
     public String firstName;
@@ -47,8 +47,8 @@ public class UserByIdRespView {
     public UserByIdRespView() {
     }
 
-    public UserByIdRespView(Long officeId, String firstName, String secondName, String middleName, String position, String phone, String docName, String docNumber, Date docDate, String citizenshipName, Integer citizenshipCode, Boolean isIdentified) {
-        this.officeId = officeId;
+    public UserByIdRespView(Long id, String firstName, String secondName, String middleName, String position, String phone, String docName, String docNumber, Date docDate, String citizenshipName, Integer citizenshipCode, Boolean isIdentified) {
+        this.id = id;
         this.firstName = firstName;
         this.secondName = secondName;
         this.middleName = middleName;

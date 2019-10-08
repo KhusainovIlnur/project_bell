@@ -120,6 +120,7 @@ public class UserControllerTest {
         // получение существующего пользователя по id
         mockMvc.perform(get("/api/user/9"))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.id").value(9))
                 .andExpect(jsonPath("$.data.firstName").value("Иван"))
                 .andExpect(jsonPath("$.data.secondName").isEmpty())
                 .andExpect(jsonPath("$.data.middleName").isEmpty())
@@ -131,5 +132,23 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.data.citizenshipName").value("Беларусь"))
                 .andExpect(jsonPath("$.data.citizenshipCode").value("112"))
                 .andExpect(jsonPath("$.data.isIdentified").isEmpty());
+    }
+
+    /**
+     * Тестирование неудачного создания пользователя
+     * @throws Exception
+     */
+    @Test
+    public void saveUserFail() throws Exception {
+        // создание пользователя
+        UserSaveReqView testReq = new UserSaveReqView();
+        testReq.officeId = 2L;
+        testReq.firstName = "Иван";
+        testReq.position = "Продавец-консультант";
+        testReq.docCode = 55; // несуществующий код документа
+        testReq.citizenshipCode = 112;
+        mockMvc.perform(post("/api/user/save").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(testReq)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.error").value("Документ с таким кодом не найден"));
     }
 }

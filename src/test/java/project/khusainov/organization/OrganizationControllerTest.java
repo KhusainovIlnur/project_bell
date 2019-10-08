@@ -3,15 +3,24 @@ package project.khusainov.organization;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import project.khusainov.organization.service.OrganizationService;
 import project.khusainov.organization.view.OrganizationListReqView;
+import project.khusainov.organization.view.OrganizationListRespView;
 import project.khusainov.organization.view.OrganizationUpdateReqView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.Matchers.containsString;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -29,21 +38,44 @@ public class OrganizationControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Mock
+    private OrganizationService organizationService;
+
     /**
-     * Тестирование получения организаций по различным параметрам
+     * Тестирование получение организации по одному параметру
      * @throws Exception
      */
     @Test
-    public void getList() throws Exception {
-        // получение организации по одному параметру
-        OrganizationListReqView testReq1 = new OrganizationListReqView();
-        testReq1.name = "Билайн";
-        mockMvc.perform(post("/api/organization/list").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(testReq1)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data[0].name").value("Билайн"))
-                .andExpect(jsonPath("$.data[0].isActive").value(true));
+    public void getListByOneParameter() throws Exception {
+        OrganizationListReqView testReq = new OrganizationListReqView();
+        testReq.name = "Билайн";
+        ResultActions resultActions = mockMvc.perform(post("/api/organization/list").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(testReq)));
+        resultActions.andExpect(status().isOk());
 
-        // получение организации по нескольким параметрам
+        // возвращаемый результат сервис-слоем
+        List<OrganizationListRespView> testResp = new ArrayList<>();
+        OrganizationListRespView item = new OrganizationListRespView();
+        item.id = 2L;
+        item.name = "Билайн";
+        item.isActive = true;
+        testResp.add(item);
+
+        // эмулируем сервис-слой с помощью mock объекта
+        when(organizationService.getOrganizationByFilter(testReq)).thenReturn(testResp);
+        organizationService.getOrganizationByFilter(testReq);
+        mapper.writeValueAsString(organizationService.getOrganizationByFilter(testReq));
+
+        resultActions.andExpect(jsonPath("$.data[0].id").value(testResp.get(0).id));
+        resultActions.andExpect(jsonPath("$.data[0].name").value(testResp.get(0).name));
+        resultActions.andExpect(jsonPath("$.data[0].isActive").value(testResp.get(0).isActive));
+    }
+
+    /**
+     * Получение организации по нескольким параметрам
+     * @throws Exception
+     */
+    @Test
+    public void getListBySomeParameter() throws Exception {
         OrganizationListReqView testReq2 = new OrganizationListReqView();
         testReq2.name = "МТС";
         testReq2.isActive = false;
@@ -51,19 +83,45 @@ public class OrganizationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0].name").value("МТС"))
                 .andExpect(jsonPath("$.data[0].isActive").value(false));
+    }
 
-        // получение пустого результата
-        OrganizationListReqView testReq3 = new OrganizationListReqView();
-        testReq3.name = "МТС55";
-        mockMvc.perform(post("/api/organization/list").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(testReq3)))
+    /**
+     * Получение организации - пустой результат
+     * @throws Exception
+     */
+    @Test
+    public void getListEmptyResult() throws Exception {
+        OrganizationListReqView testReq = new OrganizationListReqView();
+        testReq.name = "МТС55";
+        mockMvc.perform(post("/api/organization/list").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(testReq)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").isEmpty());
+    }
 
-        // неккоректный запрос
-        OrganizationListReqView testReq4 = new OrganizationListReqView();
-        testReq4.name = "МТСМТСМТСМТСМТСМТСМТСМТСМТСМТСМТСМТСМТСМТСМТСМТСМТСМТСМТСМТСМТСМТСМТСМТСМТСМТСМТС";
-        mockMvc.perform(post("/api/organization/list").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(testReq4)))
-                .andExpect(status().isBadRequest());
+    /**
+     * Некорректный запрос, без обязательных парметров
+     * @throws Exception
+     */
+    @Test
+    public void getListWithoutRequiredParameters() throws Exception {
+        OrganizationListReqView testReq = new OrganizationListReqView();
+        testReq.isActive = true;
+        mockMvc.perform(post("/api/organization/list").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(testReq)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value(containsString("name cannot be null")));
+    }
+
+    /**
+     * Некорректный запрос, не соблюдены условия валидации
+     * @throws Exception
+     */
+    @Test
+    public void getListBadRequest() throws Exception {
+        OrganizationListReqView testReq = new OrganizationListReqView();
+        testReq.name = "МТС_МТС_МТС_МТС_МТС_МТС_МТС_МТС_МТС_МТС_МТС_МТС_МТС_МТС_МТС_МТС_МТС_МТС_МТС";
+        mockMvc.perform(post("/api/organization/list").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(testReq)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value(containsString("size must be between 2 and 50")));
     }
 
     /**

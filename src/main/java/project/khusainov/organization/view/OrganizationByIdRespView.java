@@ -27,6 +27,9 @@ public class OrganizationByIdRespView {
     @ApiModelProperty(value = "Активность организации", example = "true")
     public Boolean isActive;
 
+    public OrganizationByIdRespView() {
+    }
+
     public OrganizationByIdRespView(Long id, String name, String fullName, String inn, String kpp, String address, String phone, Boolean isActive) {
         this.id = id;
         this.name = name;
