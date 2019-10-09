@@ -1,16 +1,18 @@
 package project.khusainov.user.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.khusainov.exception.NotFoundException;
+import project.khusainov.handbook.country.model.Country;
 import project.khusainov.handbook.country.service.CountryService;
+import project.khusainov.handbook.doc.model.Document;
+import project.khusainov.handbook.doc.model.DocumentType;
 import project.khusainov.handbook.doc.service.DocService;
 import project.khusainov.office.service.OfficeService;
 import project.khusainov.user.dao.UserDao;
-import project.khusainov.handbook.country.model.Country;
-import project.khusainov.handbook.doc.model.Document;
-import project.khusainov.handbook.doc.model.DocumentType;
 import project.khusainov.user.model.User;
 import project.khusainov.user.view.UserByIdRespView;
 import project.khusainov.user.view.UserListReqView;
@@ -25,6 +27,8 @@ import java.util.List;
  */
 @Service
 public class UserServiceImpl implements UserService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+
     private UserDao dao;
 
     @Autowired
@@ -112,6 +116,7 @@ public class UserServiceImpl implements UserService {
         user.setIdentified(userSaveReqView.isIdentified);
 
         dao.save(user);
+        LOGGER.debug("Новый пользователь добавлен");
     }
 
     /**
@@ -120,6 +125,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateUser(UserUpdateReqView userUpdateReqView) {
+        LOGGER.debug("Пользователь с id={} изменен", userUpdateReqView.id);
         dao.update(userUpdateReqView);
     }
 }

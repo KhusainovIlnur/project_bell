@@ -1,5 +1,7 @@
 package project.khusainov.office.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,8 @@ import java.util.List;
  */
 @Service
 public class OfficeServiceImpl implements OfficeService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(OfficeServiceImpl.class);
+
     private OfficeDao dao;
 
     @Autowired
@@ -67,6 +71,7 @@ public class OfficeServiceImpl implements OfficeService {
                 );
 
         dao.save(office);
+        LOGGER.debug("Новый офис добавлен");
     }
 
     /**
@@ -75,6 +80,7 @@ public class OfficeServiceImpl implements OfficeService {
     @Override
     @Transactional
     public void updateOffice(OfficeUpdateReqView officeUpdateReqView) {
+        LOGGER.debug("Офис с id={} изменен", officeUpdateReqView.id);
         dao.update(officeUpdateReqView);
     }
 }

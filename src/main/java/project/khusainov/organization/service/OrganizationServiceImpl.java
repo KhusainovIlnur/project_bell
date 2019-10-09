@@ -1,9 +1,10 @@
 package project.khusainov.organization.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.khusainov.exception.NotFoundException;
 import project.khusainov.organization.dao.OrganizationDao;
 import project.khusainov.organization.model.Organization;
 import project.khusainov.organization.view.OrganizationByIdRespView;
@@ -19,6 +20,8 @@ import java.util.List;
  */
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(OrganizationServiceImpl.class);
+
     private OrganizationDao dao;
 
     @Autowired
@@ -62,6 +65,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                 );
 
         dao.save(organization);
+        LOGGER.debug("Новая организация добавлена");
     }
 
     /**
@@ -71,5 +75,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Transactional
     public void updateOrganization(OrganizationUpdateReqView organizationUpdateReqView) {
         dao.update(organizationUpdateReqView);
+        LOGGER.debug("Организация с id={} изменена", organizationUpdateReqView.id);
     }
 }
