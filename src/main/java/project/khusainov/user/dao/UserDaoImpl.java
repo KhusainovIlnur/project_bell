@@ -11,6 +11,7 @@ import project.khusainov.handbook.doc.model.Document;
 import project.khusainov.handbook.doc.model.DocumentType;
 import project.khusainov.office.view.OfficeByIdRespView;
 import project.khusainov.user.model.User;
+import project.khusainov.user.service.UserService;
 import project.khusainov.user.view.UserByIdRespView;
 import project.khusainov.user.view.UserListReqView;
 import project.khusainov.user.view.UserListRespView;
@@ -145,10 +146,19 @@ public class UserDaoImpl implements UserDao {
     }
 
     private void updateUser(UserUpdateReqView userUpdateReqView) {
-        OfficeByIdRespView officeId = officeService.getOfficeById(userUpdateReqView.officeId);
-        if (userUpdateReqView.officeId != null && officeId == null) {
-            throw new NotFoundException("Офис с таким id не найден");
+        OfficeByIdRespView officeId;
+        if (userUpdateReqView.officeId != null) {
+            try {
+                officeService.getOfficeById(userUpdateReqView.officeId);
+            } catch (NotFoundException ex) {
+                throw ex;
+            }
+            officeId = officeService.getOfficeById(userUpdateReqView.officeId);
         }
+        else {
+            officeId = null;
+        }
+
         Country countryByCode = countryService.getCountryByCode(userUpdateReqView.citizenshipCode);
         if (userUpdateReqView.citizenshipCode != null && countryByCode == null) {
             throw new NotFoundException("Страна с таким кодом не найдена");

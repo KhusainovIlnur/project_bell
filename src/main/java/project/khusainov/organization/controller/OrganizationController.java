@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.khusainov.exception.BadRequestException;
-import project.khusainov.exception.NotFoundException;
 import project.khusainov.organization.service.OrganizationService;
 import project.khusainov.organization.view.OrganizationByIdRespView;
 import project.khusainov.organization.view.OrganizationListReqView;
@@ -57,13 +56,7 @@ public class OrganizationController {
     })
     @GetMapping("/{id:[\\d]+}")
     public OrganizationByIdRespView getById(@PathVariable Long id) {
-        if (organizationService.getOrganizationById(id) == null) {
-            throw new NotFoundException("Организация с таким id не найдена");
-        }
-        else {
-            return organizationService.getOrganizationById(id);
-        }
-
+        return organizationService.getOrganizationById(id);
     }
 
     @ApiOperation(value = "Добавить организацию", httpMethod = "POST")

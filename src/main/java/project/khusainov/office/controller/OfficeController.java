@@ -57,12 +57,7 @@ public class OfficeController {
     })
     @GetMapping("/{id:[\\d]+}")
     public OfficeByIdRespView getById(@PathVariable Long id) {
-        if (officeService.getOfficeById(id) == null) {
-            throw new NotFoundException("Офис с таким id не найден");
-        }
-        else {
-            return officeService.getOfficeById(id);
-        }
+        return officeService.getOfficeById(id);
     }
 
     @ApiOperation(value = "Добавить офис", httpMethod = "POST")

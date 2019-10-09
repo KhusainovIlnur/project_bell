@@ -57,12 +57,7 @@ public class UserController {
     })
     @GetMapping("/{id:[\\d]+}")
     public UserByIdRespView getById(@PathVariable Long id) {
-        if (userService.getUserById(id) == null) {
-            throw new NotFoundException("Пользователь с таким id не найден");
-        }
-        else {
-            return userService.getUserById(id);
-        }
+        return userService.getUserById(id);
     }
 
     @ApiOperation(value = "Добавить пользователя", httpMethod = "POST")

@@ -49,7 +49,12 @@ public class OfficeServiceImpl implements OfficeService {
     @Override
     @Transactional(readOnly = true)
     public OfficeByIdRespView getOfficeById(Long id) {
-        return dao.getOfficeById(id);
+        if (dao.getOfficeById(id) == null) {
+            throw new NotFoundException("Офис с таким id не найден");
+        }
+        else {
+            return dao.getOfficeById(id);
+        }
     }
 
     /**
@@ -58,9 +63,13 @@ public class OfficeServiceImpl implements OfficeService {
     @Override
     @Transactional
     public void saveOffice(OfficeSaveReqView officeSaveReqView) {
-        if (organizationService.getOrganizationById(officeSaveReqView.orgId) == null) {
-            throw new NotFoundException("Организация с таким id не найдена");
+        try {
+            organizationService.getOrganizationById(officeSaveReqView.orgId);
         }
+        catch (NotFoundException ex){
+            throw ex;
+        }
+
         Office office = new Office
                 (
                         officeSaveReqView.orgId,

@@ -61,7 +61,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserByIdRespView getUserById(Long id) {
-        return dao.getUserById(id);
+        if (dao.getUserById(id) == null) {
+            throw new NotFoundException("Пользователь с таким id не найден");
+        }
+        else {
+            return dao.getUserById(id);
+        }
     }
 
     /**
@@ -70,9 +75,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void saveUser(UserSaveReqView userSaveReqView) {
-        if (officeService.getOfficeById(userSaveReqView.officeId) == null) {
-            throw new NotFoundException("Офис с таким id не найден");
+        try {
+            officeService.getOfficeById(userSaveReqView.officeId);
         }
+        catch (NotFoundException ex) {
+            throw ex;
+        }
+
         DocumentType dtByCode = docService.getDocByCode(userSaveReqView.docCode);
         DocumentType dtByName = docService.getDocByName(userSaveReqView.docName);
 
@@ -125,7 +134,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateUser(UserUpdateReqView userUpdateReqView) {
-        LOGGER.debug("Пользователь с id={} изменен", userUpdateReqView.id);
+    // проверка на существование пользователя
+        try {
+            getUserById(userUpdateReqView.id);
+        } catch (NotFoundException ex) {
+            throw ex;
+        }
         dao.update(userUpdateReqView);
+        LOGGER.debug("Пользователь с id={} изменен", userUpdateReqView.id);
     }
 }
