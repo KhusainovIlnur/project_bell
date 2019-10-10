@@ -2,19 +2,16 @@ package project.khusainov.office.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import project.khusainov.exception.NotFoundException;
 import project.khusainov.office.model.Office;
 import project.khusainov.office.view.OfficeByIdRespView;
 import project.khusainov.office.view.OfficeListReqView;
 import project.khusainov.office.view.OfficeListRespView;
 import project.khusainov.office.view.OfficeUpdateReqView;
-import project.khusainov.organization.service.OrganizationService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
@@ -109,23 +106,16 @@ public class OfficeDaoImpl implements OfficeDao {
      */
     @Override
     public void update(OfficeUpdateReqView officeUpdateReqView) {
-        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-        CriteriaUpdate<Office> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(Office.class); // что обновляем
-        Root<Office> office = criteriaUpdate.from(Office.class); // откуда берем
+        Office office = em.find(Office.class, officeUpdateReqView.id);
 
-        criteriaUpdate
-                .set(office.get("id"),        officeUpdateReqView.id)
-                .set(office.get("name"),      officeUpdateReqView.name)
-                .set(office.get("address"),   officeUpdateReqView.address);
-        if (officeUpdateReqView.phone != null) {
-            criteriaUpdate.set(office.get("phone"), officeUpdateReqView.phone);
+        office.setName(officeUpdateReqView.name);
+        office.setAddress(officeUpdateReqView.address);
+
+        if (officeUpdateReqView.phone != null){
+            office.setPhone(officeUpdateReqView.phone);
         }
-        if (officeUpdateReqView.isActive != null) {
-            criteriaUpdate.set(office.get("isActive"), officeUpdateReqView.isActive);
+        if (officeUpdateReqView.isActive != null){
+            office.setActive(officeUpdateReqView.isActive);
         }
-        criteriaUpdate.where(
-                criteriaBuilder.equal(office.get("id"), officeUpdateReqView.id)
-        );
-        em.createQuery(criteriaUpdate).executeUpdate();
     }
 }

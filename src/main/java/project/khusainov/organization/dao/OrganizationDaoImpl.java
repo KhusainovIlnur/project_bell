@@ -11,7 +11,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
@@ -106,26 +105,19 @@ public class OrganizationDaoImpl implements OrganizationDao {
      */
     @Override
     public void update(OrganizationUpdateReqView organizationUpdateReqView) {
-        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-        CriteriaUpdate<Organization> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(Organization.class); // что обновляем
-        Root<Organization> organization = criteriaUpdate.from(Organization.class); // откуда берем
+        Organization organization = em.find(Organization.class, organizationUpdateReqView.id);
 
-        criteriaUpdate
-                .set(organization.get("id"),        organizationUpdateReqView.id)
-                .set(organization.get("name"),      organizationUpdateReqView.name)
-                .set(organization.get("fullName"),  organizationUpdateReqView.fullName)
-                .set(organization.get("inn"),       organizationUpdateReqView.inn)
-                .set(organization.get("kpp"),       organizationUpdateReqView.kpp)
-                .set(organization.get("address"),   organizationUpdateReqView.address);
+                organization.setName(organizationUpdateReqView.name);
+                organization.setFullName(organizationUpdateReqView.fullName);
+                organization.setInn(organizationUpdateReqView.inn);
+                organization.setKpp(organizationUpdateReqView.kpp);
+                organization.setAddress(organizationUpdateReqView.address);
+
         if (organizationUpdateReqView.phone != null){
-            criteriaUpdate.set(organization.get("phone"), organizationUpdateReqView.phone);
+            organization.setPhone(organizationUpdateReqView.phone);
         }
         if (organizationUpdateReqView.isActive != null){
-            criteriaUpdate.set(organization.get("isActive"), organizationUpdateReqView.isActive);
+            organization.setActive(organizationUpdateReqView.isActive);
         }
-        criteriaUpdate.where(
-                criteriaBuilder.equal(organization.get("id"), organizationUpdateReqView.id)
-        );
-        em.createQuery(criteriaUpdate).executeUpdate();
     }
 }
